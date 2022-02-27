@@ -2,70 +2,33 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-/**
- * User
- *
- * @ORM\Table(name="user", indexes={@ORM\Index(name="id_type_user", columns={"id_type_user"})})
- * @ORM\Entity
- */
-class User
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=80, nullable=false)
-     */
-    private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $email;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=45, nullable=false)
-     */
-    private $password;
+    #[ORM\Column(type: 'json')]
+    private $roles = [];
 
-    /**
-     * @var \UserType
-     *
-     * @ORM\ManyToOne(targetEntity="UserType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_type_user", referencedColumnName="id")
-     * })
-     */
-    private $idTypeUser;
+    #[ORM\Column(type: 'string')]
+    private $password;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -80,7 +43,39 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -92,17 +87,12 @@ class User
         return $this;
     }
 
-    public function getIdTypeUser(): ?UserType
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        return $this->idTypeUser;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
-
-    public function setIdTypeUser(?UserType $idTypeUser): self
-    {
-        $this->idTypeUser = $idTypeUser;
-
-        return $this;
-    }
-
-
 }
