@@ -62,5 +62,70 @@ class Image
      */
     private $idState;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getIdUser(): ?User
+    {
+        return $this->idUser;
+    }
+
+    public function setIdUser(?User $idUser): self
+    {
+        $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    public function getIdState(): ?State
+    {
+        return $this->idState;
+    }
+
+    public function setIdState(?State $idState): self
+    {
+        $this->idState = $idState;
+
+        return $this;
+    }
+
 
 }
