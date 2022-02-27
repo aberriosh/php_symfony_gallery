@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gallery Gallery{% endblock %}
+
+{% block body %}
+    <h2>{{ name }}'s Gallery</h2>
+    {% if imgs %}
+        <table id="articles" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Article Title</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for img in imgs %}
+                    <tr>
+                        <td>{{ img }}</td>
+                        <td>
+                            <a href="/" class="btn btn-dark">Show</a>
+                            <a href="/" class="btn btn-light">Edit</a>
+                            <a href="/" class="btn btn-danger delete-article" data-id="/">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nxo articles to display</p>
+    {% endif %}
+{% endblock %}
