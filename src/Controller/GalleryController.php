@@ -15,7 +15,7 @@
 
     class GalleryController extends AbstractController{
         /**
-        *@Route("/")
+        *@Route("/", name="index")
         *@Method({"GET"})
         */
         public function index(){
